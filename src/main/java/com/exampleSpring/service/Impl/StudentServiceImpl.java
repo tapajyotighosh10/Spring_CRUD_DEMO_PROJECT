@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -27,29 +28,51 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student getStudentById(Long id) {
-        return studentRepository.findById(id).orElseThrow(()-> new RuntimeException("Student not found with this student id"));
+        return studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student not found with this student id"));
     }
 
     @Override
     public Student updateStudent(Long id, Student student) {
 
-    Student std = studentRepository.findById(id).orElseThrow(()-> new RuntimeException("Student not found with this student id"));
-    std.setStudentName(student.getStudentName());
-    std.setClaas(student.getClaas());
-    std.setMobileNumber(student.getMobileNumber());
-    std.setEmail(student.getEmail());
-    return std;
+        Student std = studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student not found with this student id"));
+        std.setStudentName(student.getStudentName());
+        std.setClaas(student.getClaas());
+        std.setMobileNumber(student.getMobileNumber());
+        std.setEmail(student.getEmail());
+        return std;
     }
 
     @Override
     public Student deleteStudent(Long id) {
-        Student std = studentRepository.findById(id).orElseThrow(()-> new RuntimeException("Student not found with this student id"));
+        Student std = studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student not found with this student id"));
         studentRepository.deleteById(id);
         return std;
     }
 
     @Override
-    public List<Student> getStudentByName(String studentName) {
+    public Optional<Student> getStudentByName(String studentName) {
         return studentRepository.getStudentsByName(studentName);
     }
+
+    @Override
+    public Optional<Student> findByEmail(String email) {
+        return studentRepository.findByEmail(email);
+    }
+
+    @Override
+    public Student createOrUpdateStudent(Student student) {
+        Optional<Student> existingStudent = studentRepository.findByEmail(student.getEmail());
+
+        if (existingStudent.isPresent()) {
+            Student std = existingStudent.get(); // if found then update the existing data otherwise save the new data
+            std.setStudentName(student.getStudentName());
+            std.setClaas(student.getClaas());
+            std.setMobileNumber(student.getMobileNumber());
+            return studentRepository.save(std);
+        } else {
+            return studentRepository.save(student);
+        }
+    }
+
+
 }
