@@ -1,6 +1,7 @@
 package com.exampleSpring.service;
 
 import com.exampleSpring.entity.Student;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,4 +22,11 @@ public interface StudentService {
     Optional<Student> findByEmail(String email);
 
     Student createOrUpdateStudent(Student student);
-}
+
+    List<Student> getStudentWithSorting(String field);
+
+    Page<Student> getStudentWithPagination(int offset, int pageSize);
+
+    Page<Student> getStudentWithPaginationAndSorting(int offset,int pageSize,String field);
+
+    }

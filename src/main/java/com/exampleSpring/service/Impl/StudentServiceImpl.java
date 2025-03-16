@@ -5,6 +5,9 @@ import com.exampleSpring.entity.Student;
 import com.exampleSpring.repository.StudentRepository;
 import com.exampleSpring.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -72,6 +75,23 @@ public class StudentServiceImpl implements StudentService {
         } else {
             return studentRepository.save(student);
         }
+    }
+
+    @Override
+    public List<Student> getStudentWithSorting(String field){
+        return studentRepository.findAll(Sort.by(Sort.Direction.ASC,field));
+    }
+
+    @Override
+    public Page<Student> getStudentWithPagination(int offset,int pageSize){
+        Page<Student> studentPage= studentRepository.findAll(PageRequest.of(offset, pageSize));
+        return studentPage;
+    }
+
+    @Override
+    public Page<Student> getStudentWithPaginationAndSorting(int offset,int pageSize,String field){
+        Page<Student> studentPage= studentRepository.findAll(PageRequest.of(offset, pageSize).withSort(Sort.by(field)));
+        return studentPage;
     }
 
 
