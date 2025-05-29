@@ -32,7 +32,11 @@ public class StorageServiceImpl implements StorageService {
 
         Optional<ImageData> dbImage = storageRepository.findByName(file);
 
-        byte[] images = ImageUtils.decompressImage(dbImage.get().getImageData());
-        return images;
+        if (dbImage.isPresent()) {
+            byte[] images = ImageUtils.decompressImage(dbImage.get().getImageData());
+            return images;
+        } else {
+            throw new RuntimeException("Image not found: " + file);
+        }
     }
 }
