@@ -25,7 +25,7 @@ public class EmailSendingController {
             @RequestParam("subject") String subject,
             @RequestParam("body") String body) {
         try {
-            emailService.sendEmail(recipient, body, subject);
+            emailService.sendEmail(recipient, subject, body);
             return String.format("Email sent successfully to '%s' with subject '%s'.", recipient, subject);
         } catch (Exception e) {
             return "Error while sending email: " + e.getMessage();
