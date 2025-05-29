@@ -1,7 +1,7 @@
 package com.exampleSpring.controller;
 
 
-import com.exampleSpring.service.Impl.EmailServiceImpl;
+import com.exampleSpring.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class EmailSendingController {
 
     @Autowired
-    private EmailServiceImpl emailService;
+    private EmailService emailService;
 
     // for sending email we don't need to create two separate api like with attachment or without attachment
     // for practicing created two api.
@@ -47,6 +47,5 @@ public class EmailSendingController {
             return "Error while sending email: " + e.getMessage();
         }
     }
-
 
 }
